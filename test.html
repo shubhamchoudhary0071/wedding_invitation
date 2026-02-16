@@ -1,0 +1,1281 @@
+<doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All in one place to FAANG — Structured Notes (LeetCode Discuss 3365796)</title>
+  <style>
+    :root{
+      --bg: #0b0f17;
+      --panel: #101827;
+      --panel2:#0f1a2b;
+      --text:#e6edf7;
+      --muted:#a7b3c7;
+      --accent:#7dd3fc;
+      --accent2:#a78bfa;
+      --ok:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      --serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(125,211,252,.12), transparent 60%),
+        radial-gradient(900px 500px at 80% 15%, rgba(167,139,250,.10), transparent 55%),
+        radial-gradient(900px 700px at 60% 90%, rgba(52,211,153,.08), transparent 55%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+    header{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,15,23,.7);
+      border-bottom:1px solid var(--border);
+    }
+    .topbar{
+      max-width: 1200px;
+      margin:0 auto;
+      padding: 14px 16px;
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .title{
+      display:flex; flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .title h1{
+      font-size:16px; margin:0;
+      letter-spacing:.2px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .title .meta{
+      font-size:12px; color:var(--muted);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .pillrow{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:7px 10px;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text);
+      cursor:pointer;
+      user-select:none;
+      display:inline-flex; align-items:center; gap:8px;
+    }
+    .pill:hover{border-color: rgba(125,211,252,.35)}
+    .pill kbd{
+      font-family:var(--mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+      border-bottom-color: rgba(255,255,255,.25);
+      border-radius: 8px;
+      background: rgba(0,0,0,.15);
+      color: var(--muted);
+    }
+
+    .layout{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 18px 16px 40px;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 980px){
+      .layout{grid-template-columns:1fr}
+      .sidebar{position:relative; top:auto}
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .sidebar{
+      position: sticky;
+      top: 72px;
+      align-self:start;
+      padding: 14px;
+    }
+    .search{
+      display:flex; gap:10px; align-items:center;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.18);
+      border: 1px solid var(--border);
+    }
+    .search input{
+      width:100%;
+      background: transparent;
+      border:0;
+      outline:none;
+      color: var(--text);
+      font-size: 14px;
+    }
+    .hint{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .toc{
+      margin-top:14px;
+      border-top:1px solid var(--border);
+      padding-top:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      font-size:13px;
+    }
+    .toc a{
+      color: var(--text);
+      opacity:.9;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+    }
+    .toc a:hover{
+      border-color: rgba(125,211,252,.35);
+      background: rgba(125,211,252,.08);
+      text-decoration:none;
+    }
+
+    main{padding: 0}
+    section{
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    section h2{
+      margin:0 0 8px 0;
+      font-size: 18px;
+      letter-spacing:.2px;
+    }
+    section p{margin: 8px 0; color: rgba(230,237,247,.92)}
+    .note{
+      margin-top: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(125,211,252,.35);
+      background: rgba(125,211,252,.06);
+      color: rgba(230,237,247,.92);
+      font-size: 13px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    @media (max-width: 860px){
+      .grid{grid-template-columns:1fr}
+    }
+    .mini{
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.15);
+    }
+    .mini h3{
+      margin:0 0 6px 0; font-size: 14px;
+    }
+    ul{margin: 8px 0 0 18px}
+    li{margin: 6px 0}
+    .badge{
+      display:inline-block;
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    details{
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.14);
+      border-radius: 14px;
+      padding: 10px 12px;
+      margin-top: 10px;
+    }
+    details > summary{
+      cursor:pointer;
+      font-weight: 650;
+      font-size: 14px;
+      list-style:none;
+    }
+    details > summary::-webkit-details-marker{display:none}
+    details > summary:before{
+      content:"▸";
+      display:inline-block;
+      margin-right: 10px;
+      color: var(--accent2);
+      transform: translateY(-1px);
+    }
+    details[open] > summary:before{content:"▾"}
+    .items{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px 12px;
+    }
+    @media (max-width: 860px){ .items{grid-template-columns:1fr} }
+
+    .item{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(16,24,39,.65);
+    }
+    .item:hover{border-color: rgba(125,211,252,.28)}
+    .item label{
+      display:flex; gap:10px; align-items:flex-start;
+      width: 100%;
+      cursor:pointer;
+    }
+    .item input[type="checkbox"]{
+      margin-top: 2px;
+      width: 16px; height: 16px;
+      accent-color: var(--ok);
+    }
+    .item .txt{min-width:0}
+    .item .txt .name{
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--text);
+      margin:0;
+      line-height:1.2;
+    }
+    .item .txt .desc{
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    code, pre{
+      font-family:var(--mono);
+    }
+    pre{
+      background: rgba(0,0,0,.25);
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 12px;
+      overflow:auto;
+      margin: 10px 0 0;
+    }
+    .footer{
+      max-width: 1200px;
+      margin: 10px auto 26px;
+      padding: 0 16px 26px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .muted{color: var(--muted)}
+    .row{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .row .spacer{flex:1}
+    .smallbtn{
+      padding:7px 10px;
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.15);
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--text);
+      cursor:pointer;
+    }
+    .smallbtn:hover{border-color: rgba(125,211,252,.35)}
+    .progress{
+      margin-top: 10px;
+      display:flex; gap:12px; flex-wrap:wrap; align-items:center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .bar{
+      height: 10px;
+      width: 220px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(0,0,0,.22);
+      overflow:hidden;
+    }
+    .bar > div{
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(52,211,153,.95), rgba(125,211,252,.85));
+    }
+    .sr-only{
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="title">
+        <h1>All in one place to FAANG — Structured Notes</h1>
+        <div class="meta">
+          Source: <a href="https://leetcode.com/discuss/post/3365796/ALL-IN-ONE-PLACE-TO-FAANG/" target="_blank" rel="noreferrer">LeetCode Discuss post 3365796</a>
+          <span class="badge">Created 2026‑02‑15</span>
+        </div>
+      </div>
+      <div class="pillrow">
+        <div class="pill" id="btnFocusSearch" title="Focus search"><span>Search</span> <kbd>/</kbd></div>
+        <div class="pill" id="btnExpand" title="Expand all sections"><span>Expand</span></div>
+        <div class="pill" id="btnCollapse" title="Collapse all sections"><span>Collapse</span></div>
+        <div class="pill" id="btnReset" title="Reset checkmarks (local)"><span>Reset</span></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar card">
+      <div class="search">
+        <span class="muted">🔎</span>
+        <input id="search" type="search" placeholder="Filter topics, questions, problems…" autocomplete="off" />
+      </div>
+      <div class="hint">
+        Tips: press <b>/</b> to jump to search. Your checkmarks are stored in <b>localStorage</b> (only in your browser).
+      </div>
+      <nav class="toc" aria-label="Table of contents">
+        <a href="#start">How to use</a>
+        <a href="#algorithms">Algorithms starter pack</a>
+        <a href="#java-ds">Java DS quick reference</a>
+        <a href="#dp-grids">DP on grids</a>
+        <a href="#faang-dsa">FAANG DSA must‑know questions</a>
+        <a href="#kadane">Kadane variations</a>
+        <a href="#graphs">Graphs cheat sheet + practice</a>
+        <a href="#segment-tree">Segment trees</a>
+        <a href="#dp-patterns">DP patterns mega list</a>
+        <a href="#design-sd">System design + job scheduler</a>
+        <a href="#solid-patterns">SOLID + Design patterns</a>
+        <a href="#java-backend">Java + Spring + Microservices</a>
+        <a href="#networking">Computer networks</a>
+        <a href="#toolbox">Language toolbox (queue/heap/binary search)</a>
+      </nav>
+    </aside>
+
+    <main>
+      <section id="start" class="card searchable">
+        <h2>How to use this page</h2>
+        <p>
+          This page is a <b>learning‑first reformat</b> of the linked LeetCode Discuss post: it keeps all major topics,
+          questions, and referenced practice problems, but organizes them into a “study notebook”.
+          For full original wording and code blocks, keep the source post open in another tab.
+        </p>
+        <div class="row">
+          <button class="smallbtn" id="btnJumpTop">↑ Back to top</button>
+          <button class="smallbtn" id="btnPrint">Print / Save as PDF</button>
+          <div class="spacer"></div>
+          <div class="progress" aria-live="polite">
+            <div class="bar" aria-hidden="true"><div id="barFill"></div></div>
+            <div><b id="progText">0%</b> complete (<span id="doneCount">0</span>/<span id="totalCount">0</span>)</div>
+          </div>
+        </div>
+
+        <div class="note">
+          <b>Copyright note:</b> This is a structured study guide (paraphrased). It intentionally avoids reproducing large verbatim chunks.
+        </div>
+      </section>
+
+      <section id="algorithms" class="card searchable">
+        <h2>Algorithms starter pack</h2>
+        <p class="muted">
+          Covers the “starting with algorithms” section: common algorithm families + when to reach for them.
+        </p>
+
+        <div class="grid">
+          <div class="mini searchable">
+            <h3>Sorting</h3>
+            <ul>
+              <li>Bubble / Selection / Insertion (simple, small inputs, teaching)</li>
+              <li>Merge sort (stable, guaranteed O(n log n))</li>
+              <li>Quick sort (fast average, watch worst‑case without randomization)</li>
+              <li>Heap sort (O(n log n), in‑place-ish, not stable)</li>
+            </ul>
+          </div>
+          <div class="mini searchable">
+            <h3>Searching</h3>
+            <ul>
+              <li>Linear search (unsorted or tiny inputs)</li>
+              <li>Binary search (sorted / monotonic “answer space”)</li>
+              <li>Binary search on answer (minimum feasible / maximum feasible patterns)</li>
+            </ul>
+          </div>
+          <div class="mini searchable">
+            <h3>Graph algorithms (named in the post)</h3>
+            <ul>
+              <li>BFS / DFS (traversal, reachability, layers)</li>
+              <li>Dijkstra (shortest path, non‑negative weights)</li>
+              <li>Bellman‑Ford (handles negative edges, detects negative cycles)</li>
+              <li>Prim / Kruskal (minimum spanning tree)</li>
+              <li>Extra concepts also mentioned: SCC, max‑flow</li>
+            </ul>
+          </div>
+          <div class="mini searchable">
+            <h3>How to choose an approach (from the post)</h3>
+            <ul>
+              <li>Read statement carefully; constraints often hint the tool.</li>
+              <li>Look for patterns in input (sorted? graph? grid?).</li>
+              <li>Practice under time pressure; learn common templates.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="java-ds" class="card searchable">
+        <h2>Java DS quick reference</h2>
+        <p class="muted">ArrayDeque, PriorityQueue, LinkedList overview + key operations (as compiled in the post).</p>
+
+        <details class="searchable">
+          <summary>ArrayDeque (Deque) — fast add/remove at both ends</summary>
+          <div class="grid">
+            <div class="mini">
+              <h3>Core operations</h3>
+              <ul>
+                <li><code>addFirst / addLast</code>, <code>offerFirst / offerLast</code></li>
+                <li><code>removeFirst / removeLast</code>, <code>pollFirst / pollLast</code></li>
+                <li><code>peek</code>, <code>element</code>, <code>size</code>, <code>toArray</code></li>
+              </ul>
+            </div>
+            <div class="mini">
+              <h3>When to use</h3>
+              <ul>
+                <li>Queue / stack behavior without LinkedList overhead</li>
+                <li>Sliding window indices, BFS queues, monotonic deque patterns</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>PriorityQueue — heap‑based ordering</summary>
+          <div class="grid">
+            <div class="mini">
+              <h3>Core operations</h3>
+              <ul>
+                <li><code>add</code>, <code>offer</code>, <code>peek</code>, <code>poll</code></li>
+                <li>Comparator for min‑heap / max‑heap style</li>
+              </ul>
+            </div>
+            <div class="mini">
+              <h3>Use cases</h3>
+              <ul>
+                <li>Top‑K, merging k sorted lists, Dijkstra, scheduling</li>
+              </ul>
+            </div>
+          </div>
+          <div class="note">
+            The post lists pros/cons; in practice, note that Java’s <code>PriorityQueue</code> is <b>not</b> inherently thread‑safe —
+            use a concurrent structure if you need cross‑thread safety.
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>LinkedList — nodes, head/tail, insert/delete in middle</summary>
+          <div class="grid">
+            <div class="mini">
+              <h3>Pros</h3>
+              <ul>
+                <li>Insert/delete in middle once you have a node reference</li>
+                <li>Good for implementing certain data structures (lists, adjacency lists)</li>
+              </ul>
+            </div>
+            <div class="mini">
+              <h3>Cons</h3>
+              <ul>
+                <li>Random access is slow vs arrays</li>
+                <li>Extra memory for pointers; slower cache locality</li>
+              </ul>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section id="dp-grids" class="card searchable">
+        <h2>DP on grids</h2>
+        <p class="muted">
+          Grid‑DP patterns from the post: count paths, minimum path sum, obstacles, maximal square.
+        </p>
+
+        <details open class="searchable">
+          <summary>Core patterns</summary>
+          <ul>
+            <li><b>Count paths</b> (right/down moves): <code>dp[i][j] = dp[i-1][j] + dp[i][j-1]</code></li>
+            <li><b>Min path sum</b>: add current cell to <code>min(from top, from left)</code></li>
+            <li><b>Obstacles</b>: if blocked cell → 0 ways; otherwise accumulate</li>
+            <li><b>Largest square of 1s</b>: <code>dp = 1 + min(top, left, diag)</code></li>
+          </ul>
+
+          <div class="items">
+            <div class="item searchable">
+              <label>
+                <input type="checkbox" data-key="lc_unique_paths" />
+                <div class="txt">
+                  <div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/unique-paths/">Unique Paths</a></div>
+                  <div class="desc">Count paths with only R/D moves.</div>
+                </div>
+              </label>
+            </div>
+            <div class="item searchable">
+              <label>
+                <input type="checkbox" data-key="lc_unique_paths_ii" />
+                <div class="txt">
+                  <div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/unique-paths-ii/">Unique Paths II</a></div>
+                  <div class="desc">Obstacles version.</div>
+                </div>
+              </label>
+            </div>
+            <div class="item searchable">
+              <label>
+                <input type="checkbox" data-key="lc_min_path_sum" />
+                <div class="txt">
+                  <div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/minimum-path-sum/">Minimum Path Sum</a></div>
+                  <div class="desc">Classic min-cost grid DP.</div>
+                </div>
+              </label>
+            </div>
+            <div class="item searchable">
+              <label>
+                <input type="checkbox" data-key="lc_max_square" />
+                <div class="txt">
+                  <div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximal-square/">Maximal Square</a></div>
+                  <div class="desc">Largest square sub-matrix of 1s.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section id="faang-dsa" class="card searchable">
+        <h2>FAANG DSA must‑know questions</h2>
+        <p class="muted">
+          This section mirrors the “FAANG preparation” list from the post and adds direct LeetCode links.
+        </p>
+
+        <details open class="searchable">
+          <summary>Arrays & Strings</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_missing_number"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/missing-number/">Find the missing number</a></div><div class="desc">XOR / sum / cycle sort patterns.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_reverse_string"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/reverse-string/">Reverse a string</a></div><div class="desc">Two pointers, in-place.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_palindrome"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/valid-palindrome/">Check palindrome</a></div><div class="desc">Ignore non-alphanumerics.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_lcp"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/longest-common-prefix/">Longest common prefix</a></div><div class="desc">Vertical scan, sort, or trie.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Linked Lists</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_rev_ll"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/reverse-linked-list/">Reverse a linked list</a></div><div class="desc">Iterative prev/curr or recursion.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_cycle_ll"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/linked-list-cycle/">Detect cycle in linked list</a></div><div class="desc">Floyd slow/fast pointers.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_merge_ll"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/merge-two-sorted-lists/">Merge two sorted linked lists</a></div><div class="desc">Two pointers.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_rm_dup_ll"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/remove-duplicates-from-sorted-list/">Remove duplicates from linked list</a></div><div class="desc">Sorted list dedupe.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Stacks & Queues</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_stack_queues"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/implement-stack-using-queues/">Stack using two queues</a></div><div class="desc">Push costly or pop costly.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_queue_stacks"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/implement-queue-using-stacks/">Queue using two stacks</a></div><div class="desc">Amortized O(1) ops.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_rpn"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/evaluate-reverse-polish-notation/">Evaluate postfix expression</a></div><div class="desc">Stack evaluation (RPN).</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_min_stack"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/min-stack/">Min stack (O(1) min)</a></div><div class="desc">Two stacks or encode deltas.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Trees & Graphs</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_validate_bst"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/validate-binary-search-tree/">Implement / validate BST</a></div><div class="desc">BST invariants via inorder or bounds.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_lca"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/">Lowest common ancestor</a></div><div class="desc">Binary tree LCA.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_num_islands"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/number-of-islands/">DFS/BFS traversal (Number of Islands)</a></div><div class="desc">Template for flood fill reachability.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_shortest_path"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/network-delay-time/">Shortest path on weighted graph</a></div><div class="desc">Dijkstra template.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Dynamic programming</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_max_subarray"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximum-subarray/">Maximum subarray sum</a></div><div class="desc">Kadane’s algorithm.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_lis"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/longest-increasing-subsequence/">Longest increasing subsequence</a></div><div class="desc">O(n log n) via binary search on tails.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_coin_change"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/coin-change/">Min coins (coin change)</a></div><div class="desc">Unbounded knapsack.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="fa_house_robber"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/house-robber/">Max sum of non‑adjacent elements</a></div><div class="desc">Take/skip DP.</div></div></label></div>
+          </div>
+        </details>
+      </section>
+
+      <section id="kadane" class="card searchable">
+        <h2>Kadane variations</h2>
+        <p class="muted">The post lists multiple Kadane-style variations. Here are the common interview ones + direct links.</p>
+
+        <details open class="searchable">
+          <summary>Variations (mapped to LeetCode practice)</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="kadane_max_sum"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximum-subarray/">Maximum subarray sum</a></div><div class="desc">Classic Kadane.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="kadane_product"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximum-product-subarray/">Maximum subarray product</a></div><div class="desc">Track min & max due to negatives.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="kadane_circular"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximum-sum-circular-subarray/">Maximum sum circular subarray</a></div><div class="desc">Max normal vs total − min subarray.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="kadane_one_del"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/">Max subarray with one deletion</a></div><div class="desc">Forward/backward best sums.</div></div></label></div>
+          </div>
+          <div class="note">
+            The post also mentions variants like “sum with indices”, “exactly k elements”, “increasing/bitonic subsequence sums”.
+            Treat these as patterns: keep <b>best ending here</b> + extra state (index, k, prev value).
+          </div>
+        </details>
+      </section>
+
+      <section id="graphs" class="card searchable">
+        <h2>Graphs cheat sheet + practice</h2>
+        <p class="muted">
+          Covers: graph types, BFS/DFS use-cases, shortest paths, MST, SCC, max-flow — plus the practice list linked in the post.
+        </p>
+
+        <details open class="searchable">
+          <summary>Graph types & common approaches</summary>
+          <ul>
+            <li><b>Weighted vs unweighted</b>, <b>directed vs undirected</b>, <b>connected vs disconnected</b>, <b>DAG</b>, <b>tree</b>, <b>bipartite</b>, <b>cyclic</b>.</li>
+            <li><b>BFS</b>: shortest path in unweighted graphs / grid level traversal.</li>
+            <li><b>DFS</b>: cycle detection, connected components, topological sort (via recursion stack), backtracking.</li>
+            <li><b>Dijkstra</b>: shortest path with non-negative weights (PQ).</li>
+            <li><b>Bellman-Ford</b>: when negative edges exist (or need cycle detection).</li>
+            <li><b>MST</b>: Prim/Kruskal for minimum connection cost.</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Practice set (from the post) — includes the curated LeetCode links</summary>
+          <div class="note">
+            The post references a master list and then groups by technique (Union-Find / DFS / BFS / coloring / topo / shortest path).
+            Master list: <a target="_blank" rel="noreferrer" href="https://leetcode.com/list/x1wy4de7/">https://leetcode.com/list/x1wy4de7/</a>
+          </div>
+
+          <details class="searchable">
+            <summary>Union-Find / Disjoint Set</summary>
+            <div class="items">
+              <div class="item searchable"><label><input type="checkbox" data-key="g_friend_circles"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/friend-circles/">Friend Circles (Number of Provinces)</a></div><div class="desc">Connected components in adjacency matrix.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_redundant"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/redundant-connection/">Redundant Connection</a></div><div class="desc">Detect extra edge creating a cycle.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_stones"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/">Most Stones Removed</a></div><div class="desc">Union rows & columns / component count.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_make_conn"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/number-of-operations-to-make-network-connected/">Make Network Connected</a></div><div class="desc">Extra cables + component count.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_eq"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/satisfiability-of-equality-equations/">Equality Equations</a></div><div class="desc">Union equals, check not-equals.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_accounts"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/accounts-merge/">Accounts Merge</a></div><div class="desc">Union emails; output grouped accounts.</div></div></label></div>
+            </div>
+          </details>
+
+          <details class="searchable">
+            <summary>DFS / Flood-fill</summary>
+            <div class="items">
+              <div class="item searchable"><label><input type="checkbox" data-key="g_surrounded"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/surrounded-regions/">Surrounded Regions</a></div><div class="desc">Mark boundary regions then flip.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_enclaves"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/number-of-enclaves/">Number of Enclaves</a></div><div class="desc">Count land not reaching boundary.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_inform"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/time-needed-to-inform-all-employees/">Time Needed to Inform Employees</a></div><div class="desc">Tree/graph DFS with times.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_closed_islands"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/number-of-closed-islands/">Number of Closed Islands</a></div><div class="desc">Flood-fill + boundary check.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_islands"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/number-of-islands/">Number of Islands</a></div><div class="desc">Connected components in grid.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_keys_rooms"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/keys-and-rooms/">Keys and Rooms</a></div><div class="desc">Reachability (graph traversal).</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_max_area"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/max-area-of-island/">Max Area of Island</a></div><div class="desc">DFS area accumulation.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_flood_fill"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/flood-fill/">Flood Fill</a></div><div class="desc">Core DFS template.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_color_border"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/coloring-a-border/">Coloring a Border</a></div><div class="desc">Component boundary detection.</div></div></label></div>
+            </div>
+          </details>
+
+          <details class="searchable">
+            <summary>BFS / shortest steps on grid</summary>
+            <div class="items">
+              <div class="item searchable"><label><input type="checkbox" data-key="g_safe_states"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/find-eventual-safe-states/">Find Eventual Safe States</a></div><div class="desc">Reverse graph + topo‑like BFS.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_01_matrix"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/01-matrix/">01 Matrix</a></div><div class="desc">Multi-source BFS distances.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_far_land"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/as-far-from-land-as-possible/">As Far from Land as Possible</a></div><div class="desc">Multi-source BFS max distance.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_rotting"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/rotting-oranges/">Rotting Oranges</a></div><div class="desc">Level-order BFS time steps.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_shortest_bin"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/shortest-path-in-binary-matrix/">Shortest Path in Binary Matrix</a></div><div class="desc">8-dir BFS.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_town_judge"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/find-the-town-judge/">Find the Town Judge</a></div><div class="desc">In/out degree trick.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_employee_imp"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/employee-importance/">Employee Importance</a></div><div class="desc">BFS/DFS over employee graph.</div></div></label></div>
+            </div>
+          </details>
+
+          <details class="searchable">
+            <summary>Graph coloring / bipartite</summary>
+            <div class="items">
+              <div class="item searchable"><label><input type="checkbox" data-key="g_bipartition"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/possible-bipartition/">Possible Bipartition</a></div><div class="desc">Bipartite check.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_is_bip"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/is-graph-bipartite/">Is Graph Bipartite?</a></div><div class="desc">2-coloring DFS/BFS.</div></div></label></div>
+            </div>
+          </details>
+
+          <details class="searchable">
+            <summary>Topological sort / DAG cycle</summary>
+            <div class="items">
+              <div class="item searchable"><label><input type="checkbox" data-key="g_course1"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/course-schedule/">Course Schedule</a></div><div class="desc">Detect cycle in prerequisite graph.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_course2"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/course-schedule-ii/">Course Schedule II</a></div><div class="desc">Output topo ordering.</div></div></label></div>
+            </div>
+          </details>
+
+          <details class="searchable">
+            <summary>Shortest path / MST style</summary>
+            <div class="items">
+              <div class="item searchable"><label><input type="checkbox" data-key="g_network_delay"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/network-delay-time/">Network Delay Time</a></div><div class="desc">Dijkstra with PQ.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_find_city"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/">Find the City (threshold distance)</a></div><div class="desc">All-pairs / Dijkstra from each node.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_cheapest_k"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/cheapest-flights-within-k-stops/">Cheapest Flights within K Stops</a></div><div class="desc">Bellman-Ford / layered BFS-Dijkstra.</div></div></label></div>
+              <div class="item searchable"><label><input type="checkbox" data-key="g_min_cost_connect"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/connecting-cities-with-minimum-cost/">Connecting Cities with Minimum Cost</a></div><div class="desc">MST (Kruskal/Prim).</div></div></label></div>
+            </div>
+          </details>
+        </details>
+
+        <details class="searchable">
+          <summary>Templates (high-level)</summary>
+          <div class="grid">
+            <div class="mini">
+              <h3>BFS (unweighted shortest path)</h3>
+              <pre><code>queue = [start]
+dist[start] = 0
+while queue:
+  u = pop_left()
+  for v in neighbors(u):
+    if v not visited:
+      dist[v] = dist[u] + 1
+      push_right(v)</code></pre>
+            </div>
+            <div class="mini">
+              <h3>Dijkstra (non-negative weights)</h3>
+              <pre><code>pq = [(0, start)]
+dist[start] = 0
+while pq:
+  d,u = pop_min()
+  if d != dist[u]: continue
+  for (v,w) in edges[u]:
+    if d + w &lt; dist[v]:
+      dist[v] = d + w
+      push(pq, (dist[v], v))</code></pre>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <section id="segment-tree" class="card searchable">
+        <h2>Segment trees</h2>
+        <p class="muted">The post includes a segment tree walkthrough (max query) + notes on cycle detection in graphs.</p>
+
+        <details open class="searchable">
+          <summary>What to remember</summary>
+          <ul>
+            <li>Segment tree supports <b>range query</b> + <b>point update</b> in <b>O(log n)</b>.</li>
+            <li>Common aggregates: sum/min/max/gcd; extend with lazy propagation for range updates.</li>
+            <li>Implementation idea: build recursively; query with 3 cases (outside / fully inside / partial overlap).</li>
+          </ul>
+
+          <div class="items">
+            <div class="item searchable">
+              <label>
+                <input type="checkbox" data-key="seg_rq_mut" />
+                <div class="txt">
+                  <div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/range-sum-query-mutable/">Range Sum Query — Mutable</a></div>
+                  <div class="desc">Segment tree or Fenwick tree baseline.</div>
+                </div>
+              </label>
+            </div>
+            <div class="item searchable">
+              <label>
+                <input type="checkbox" data-key="seg_kth" />
+                <div class="txt">
+                  <div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/count-of-smaller-numbers-after-self/">Count of Smaller Numbers After Self</a></div>
+                  <div class="desc">Segment tree/Fenwick over coordinate-compressed values.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Graph cycle detection (also near this section in the post)</summary>
+          <ul>
+            <li><b>Undirected cycle</b>: DFS with parent tracking, or BFS storing (node,parent).</li>
+            <li><b>DAG cycle</b>: Kahn’s algorithm (topo). If processed nodes &lt; V → cycle exists.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section id="dp-patterns" class="card searchable">
+        <h2>DP patterns mega list</h2>
+        <p class="muted">
+          The post contains a large curated set of DP problems grouped by pattern. This section keeps those groups and links.
+        </p>
+
+        <details open class="searchable">
+          <summary>Subsequence / LIS family</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_lis"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/longest-increasing-subsequence/">Longest Increasing Subsequence</a></div><div class="desc">O(n log n) tails / patience sorting.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_lds"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/largest-divisible-subset/">Largest Divisible Subset</a></div><div class="desc">LIS on divisibility.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_russian"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/russian-doll-envelopes/">Russian Doll Envelopes</a></div><div class="desc">Sort + LIS on heights.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_pair_chain"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximum-length-of-pair-chain/">Maximum Length of Pair Chain</a></div><div class="desc">Greedy or DP.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_num_lis"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/number-of-longest-increasing-subsequence/">Number of LIS</a></div><div class="desc">DP length + count.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_delete_earn"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/delete-and-earn/">Delete and Earn</a></div><div class="desc">Transform to House Robber on values.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_string_chain"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/longest-string-chain/">Longest String Chain</a></div><div class="desc">DP over predecessor strings.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Subset / partition DP</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_partition_eq"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/partition-equal-subset-sum/">Partition Equal Subset Sum</a></div><div class="desc">Subset sum / knapsack.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_last_stone"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/last-stone-weight-ii/">Last Stone Weight II</a></div><div class="desc">Difference partition.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_partition_k"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/partition-to-k-equal-sum-subsets/">Partition to K Equal Sum Subsets</a></div><div class="desc">Backtracking + memo / DP over bitmask.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>String DP (LCS / edit distance / palindromes)</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_lcs"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/longest-common-subsequence/">Longest Common Subsequence</a></div><div class="desc">2D DP align strings.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_edit"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/edit-distance/">Edit Distance</a></div><div class="desc">Insert/delete/replace.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_distinct_subseq"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/distinct-subsequences/">Distinct Subsequences</a></div><div class="desc">Count match ways.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_min_ascii"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/minimum-ascii-delete-sum-for-two-strings/">Minimum ASCII Delete Sum</a></div><div class="desc">Weighted LCS variant.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_pal_part2"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/palindrome-partitioning-ii/">Palindrome Partitioning II</a></div><div class="desc">Min cuts.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_pal_substr"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/palindromic-substrings/">Palindromic Substrings</a></div><div class="desc">Count pal substrings.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Coin change / counting ways</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_coin1"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/coin-change/">Coin Change</a></div><div class="desc">Min coins.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_coin2"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/coin-change-2/">Coin Change 2</a></div><div class="desc">Count combinations.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_comb4"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/combination-sum-iv/">Combination Sum IV</a></div><div class="desc">Count permutations.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_perfect_sq"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/perfect-squares/">Perfect Squares</a></div><div class="desc">Min # squares.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_tickets"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/minimum-cost-for-tickets/">Minimum Cost for Tickets</a></div><div class="desc">Day-index DP.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Interval / MCM style</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_triang"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/minimum-score-triangulation-of-polygon/">Minimum Score Triangulation</a></div><div class="desc">Partition interval DP.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_mct"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/">Minimum Cost Tree from Leaf Values</a></div><div class="desc">DP / monotonic stack.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_burst"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/burst-balloons/">Burst Balloons</a></div><div class="desc">Pick last balloon in interval.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>2D DP & prefix sums</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_block_sum"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/matrix-block-sum/">Matrix Block Sum</a></div><div class="desc">2D prefix sums.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_range2d"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/range-sum-query-2d-immutable/">Range Sum Query 2D — Immutable</a></div><div class="desc">Prefix sums baseline.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_dungeon"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/dungeon-game/">Dungeon Game</a></div><div class="desc">Reverse DP with minimum health.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_triangle"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/triangle/">Triangle</a></div><div class="desc">Bottom-up path DP.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_max_square2"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximal-square/">Maximal Square</a></div><div class="desc">Also listed in grid DP section.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_fall_path"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/minimum-falling-path-sum/">Minimum Falling Path Sum</a></div><div class="desc">Row-by-row DP.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Hash/state-machine DP</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_target_sum"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/target-sum/">Target Sum</a></div><div class="desc">Transform to subset sum or memo recursion.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_arith"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/longest-arithmetic-sequence/">Longest Arithmetic Sequence</a></div><div class="desc">DP with diff hash-map per index.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_arith_diff"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/">Longest Arithmetic Subsequence (given diff)</a></div><div class="desc">DP on value.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_max_prod_split"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/">Max Product of Split Binary Tree</a></div><div class="desc">Tree sums + maximize split.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Stock DP (state machine)</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="st1"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock/">Best Time to Buy and Sell Stock</a></div><div class="desc">One transaction.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="st2"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/">Stock II</a></div><div class="desc">Unlimited transactions.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="st3"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/">Stock III</a></div><div class="desc">At most 2 transactions.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="st4"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/">Stock IV</a></div><div class="desc">At most k transactions.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="st5"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/">Stock with Cooldown</a></div><div class="desc">Cooldown state.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="st6"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee/">Stock with Transaction Fee</a></div><div class="desc">Fee in transitions.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Probability DP / Game DP / Misc</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_oob"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/out-of-boundary-paths/">Out of Boundary Paths</a></div><div class="desc">Move count DP.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_knight"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/knight-probability-in-chessboard/">Knight Probability in Chessboard</a></div><div class="desc">k-step probability DP.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_predict"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/predict-the-winner/">Predict the Winner</a></div><div class="desc">Minimax DP.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_stone_game"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/stone-game/">Stone Game</a></div><div class="desc">Game DP baseline.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_div3"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/greatest-sum-divisible-by-three/">Greatest Sum Divisible by Three</a></div><div class="desc">DP on remainder classes.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_decode"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/decode-ways/">Decode Ways</a></div><div class="desc">1D DP with invalid zeros.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_unique_digits"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/count-numbers-with-unique-digits/">Count Numbers with Unique Digits</a></div><div class="desc">Digit DP-ish counting.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_turb"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/longest-turbulent-subarray/">Longest Turbulent Subarray</a></div><div class="desc">DP on last comparison sign.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="dp_dice"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/number-of-dice-rolls-with-target-sum/">Dice Rolls With Target Sum</a></div><div class="desc">Ways DP with mod.</div></div></label></div>
+          </div>
+        </details>
+      </section>
+
+      <section id="design-sd" class="card searchable">
+        <h2>System design + “Design a distributed Job Scheduler”</h2>
+        <p class="muted">
+          The post includes system design Q&A topics, microservices Q&A, plus a detailed walkthrough for a distributed job scheduler.
+        </p>
+
+        <details open class="searchable">
+          <summary>Core system design questions (from the post)</summary>
+          <ul>
+            <li>What is system design? What are the key principles (modularity, separation of concerns, scalability, fault tolerance, security, usability)?</li>
+            <li>Scalability: horizontal vs vertical scaling; why load balancing matters.</li>
+            <li>Fault tolerance: redundancy, replication, failover.</li>
+            <li>Caching: improve latency and reduce load (where to cache, invalidation).</li>
+            <li>Databases: relational vs NoSQL vs graph; choose based on access patterns.</li>
+            <li>API styles: REST / SOAP / GraphQL and how to choose.</li>
+            <li>Security: authN/authZ, rate limiting, data privacy.</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Job Scheduler: study-friendly outline</summary>
+          <div class="grid">
+            <div class="mini searchable">
+              <h3>Functional requirements</h3>
+              <ul>
+                <li>Schedule one-time and recurring (cron-like) jobs.</li>
+                <li>Jobs reference an executor class (e.g., an <code>IJob</code> interface implementation).</li>
+                <li>Store execution results and allow querying.</li>
+              </ul>
+            </div>
+            <div class="mini searchable">
+              <h3>Key entities (as listed)</h3>
+              <ul>
+                <li><b>Job</b>: id, name, executor class, priority, status, last start/end, last executor, parameters</li>
+                <li><b>Trigger</b>: one-time / cron / interval; start/end boundaries</li>
+                <li><b>Executor</b>: worker node id (e.g., IP-based), last heartbeat</li>
+                <li>Relationship: Job (1) → (many) Triggers</li>
+              </ul>
+            </div>
+            <div class="mini searchable">
+              <h3>High-level architecture</h3>
+              <ul>
+                <li>Producers publish schedule requests to a message bus (Kafka topic).</li>
+                <li>Scheduler service consumes requests, generates unique IDs (Snowflake-style), writes Job+Trigger to sharded RDBMS.</li>
+                <li>Dispatcher/runner pulls due triggers, assigns to workers, tracks heartbeats.</li>
+                <li>Result handler consumes execution results and stores them in a write-optimized store (e.g., Cassandra).</li>
+                <li>Coordination (ZooKeeper) stores cluster metadata (shards, partitions, workers).</li>
+              </ul>
+            </div>
+            <div class="mini searchable">
+              <h3>Why message queues (points in post)</h3>
+              <ul>
+                <li>Decouple producers/consumers and scale independently.</li>
+                <li>Lower latency for producers; durability via persisted logs.</li>
+                <li>Ordering guarantees (within partitions) + backpressure control.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="note">
+            The post also calls out <b>time/clock reliability</b> in distributed systems (NTP drift, delays) — essential for correct scheduling.
+          </div>
+        </details>
+      </section>
+
+      <section id="solid-patterns" class="card searchable">
+        <h2>SOLID + Design patterns</h2>
+        <p class="muted">
+          The post includes SOLID principles and many design patterns with short definitions and examples.
+        </p>
+
+        <details open class="searchable">
+          <summary>SOLID principles (quick memory hooks)</summary>
+          <ul>
+            <li><b>S</b>ingle Responsibility — one reason to change.</li>
+            <li><b>O</b>pen/Closed — open for extension, closed for modification.</li>
+            <li><b>L</b>iskov Substitution — derived types must be substitutable.</li>
+            <li><b>I</b>nterface Segregation — prefer small, specific interfaces.</li>
+            <li><b>D</b>ependency Inversion — depend on abstractions; use DI for testability.</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Creational patterns</summary>
+          <ul>
+            <li>Singleton, Factory Method, Abstract Factory</li>
+            <li>Builder, Prototype</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Structural patterns</summary>
+          <ul>
+            <li>Adapter, Bridge, Composite, Decorator</li>
+            <li>Facade, Flyweight, Proxy</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Behavioral patterns</summary>
+          <ul>
+            <li>Chain of Responsibility, Command, Interpreter</li>
+            <li>Iterator, Mediator, Memento</li>
+            <li>Observer, State, Strategy, Template Method, Visitor</li>
+          </ul>
+        </details>
+      </section>
+
+      <section id="java-backend" class="card searchable">
+        <h2>Java + Spring + Microservices (interview Q&A style)</h2>
+        <p class="muted">
+          The post includes: Java version highlights, Java 8 streams/lambdas, concurrency utilities, Spring Boot basics,
+          Spring Security concepts, microservices architecture Q&A, and a brief Kafka/queue rationale (also used in job scheduler).
+        </p>
+
+        <details open class="searchable">
+          <summary>Java versions: what to remember</summary>
+          <ul>
+            <li>The post lists features across Java 7 → 20 (e.g., lambdas/streams, module system, text blocks, records, pattern matching, virtual threads, etc.).</li>
+            <li>Interview approach: know the <b>big shifts</b> (Java 8 functional style, Java 9 modules, Java 11 LTS baseline, newer language features).</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Java 8 essentials</summary>
+          <ul>
+            <li>Lambdas + functional interfaces</li>
+            <li>Streams: map / filter / reduce / collect; <code>flatMap</code>; grouping</li>
+            <li>Optional; new Date/Time API</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Spring Boot</summary>
+          <ul>
+            <li>Auto-configuration, starters, embedded server, <code>application.properties</code>/<code>yaml</code></li>
+            <li>Actuator: production endpoints (health, metrics)</li>
+            <li>Dependency injection, stereotypes (@Component/@Service/@Repository)</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Spring Security</summary>
+          <ul>
+            <li>Authentication vs authorization</li>
+            <li>Security context, <code>GrantedAuthority</code></li>
+            <li>CSRF protection</li>
+            <li>OAuth2 / OpenID Connect support</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Microservices architecture</summary>
+          <ul>
+            <li>Small independently deployable services communicating via APIs.</li>
+            <li>Service discovery; containerization; DevOps automation.</li>
+            <li>Testing strategy: unit → integration → end-to-end; monitoring/observability.</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>Extra coding snippets referenced (GFG-style problems)</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="x_atoi"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/string-to-integer-atoi/">atoi (string to int)</a></div><div class="desc">Validate digits + sign; handle overflow.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="x_lemonade"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/lemonade-change/">Lemonade Change</a></div><div class="desc">Greedy counting $5/$10 bills.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="x_meeting_rooms"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/meeting-rooms-ii/">Minimum platforms (analog: Meeting Rooms II)</a></div><div class="desc">Sort arrivals/departures; sweep-line.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="x_comb_sum"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/combination-sum/">Combination Sum</a></div><div class="desc">Backtracking / recursion.</div></div></label></div>
+          </div>
+        </details>
+      </section>
+
+      <section id="networking" class="card searchable">
+        <h2>Computer networks</h2>
+        <p class="muted">
+          The post includes a networking Q&A: network types (LAN/MAN/WAN/WLAN/SAN/VPN), OSI model layers, TCP/IP, DNS, etc.
+        </p>
+
+        <details open class="searchable">
+          <summary>Quick definitions</summary>
+          <ul>
+            <li><b>LAN/MAN/WAN</b>: increasing geographic scope; <b>WLAN</b>: wireless LAN.</li>
+            <li><b>SAN</b>: storage area network for centralized storage.</li>
+            <li><b>VPN</b>: encrypted tunnel over a public network.</li>
+          </ul>
+        </details>
+
+        <details class="searchable">
+          <summary>OSI model (7 layers)</summary>
+          <ol>
+            <li>Physical</li>
+            <li>Data Link</li>
+            <li>Network</li>
+            <li>Transport</li>
+            <li>Session</li>
+            <li>Presentation</li>
+            <li>Application</li>
+          </ol>
+        </details>
+
+        <details class="searchable">
+          <summary>TCP/IP + DNS (what interviewers usually want)</summary>
+          <ul>
+            <li><b>TCP</b>: reliable ordered byte stream; congestion control; 3-way handshake.</li>
+            <li><b>UDP</b>: best-effort datagrams; low latency.</li>
+            <li><b>IP</b>: routing packets between networks.</li>
+            <li><b>DNS</b>: translates domain names to IP addresses (caching, TTL).</li>
+          </ul>
+        </details>
+      </section>
+
+      <section id="toolbox" class="card searchable">
+        <h2>Language toolbox (queue/heap/binary search)</h2>
+        <p class="muted">The post ends with quick snippets for list/queue usage across languages, plus heap & binary search utilities.</p>
+
+        <details open class="searchable">
+          <summary>Python essentials</summary>
+          <ul>
+            <li><code>collections.deque</code> for queues (append / popleft)</li>
+            <li><code>heapq</code> for min-heaps (heappush / heappop / heapify / nsmallest / nlargest)</li>
+            <li><code>bisect</code> for binary search in sorted arrays</li>
+          </ul>
+          <pre><code># queue
+from collections import deque
+q = deque()
+q.append(x)
+x = q.popleft()
+
+# heap (min-heap)
+import heapq
+heap = []
+heapq.heappush(heap, x)
+x = heapq.heappop(heap)
+
+# binary search
+import bisect
+i = bisect.bisect_left(arr, target)</code></pre>
+        </details>
+
+        <details class="searchable">
+          <summary>Tree traversals (iterative stack)</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="t_inorder"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/binary-tree-inorder-traversal/">Binary Tree Inorder Traversal</a></div><div class="desc">Stack simulation.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="t_preorder"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/binary-tree-preorder-traversal/">Binary Tree Preorder Traversal</a></div><div class="desc">Stack push right then left.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="t_postorder"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/binary-tree-postorder-traversal/">Binary Tree Postorder Traversal</a></div><div class="desc">Two-stack or reverse-preorder trick.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="t_subsets"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/subsets/">Power set (Subsets)</a></div><div class="desc">Backtracking / bitmask.</div></div></label></div>
+          </div>
+        </details>
+
+        <details class="searchable">
+          <summary>Combination Sum family (backtracking)</summary>
+          <div class="items">
+            <div class="item searchable"><label><input type="checkbox" data-key="c_sum"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/combination-sum/">Combination Sum</a></div><div class="desc">Reuse allowed.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="c_sum2"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/combination-sum-ii/">Combination Sum II</a></div><div class="desc">Each element at most once; dedupe.</div></div></label></div>
+            <div class="item searchable"><label><input type="checkbox" data-key="c_sum3"/><div class="txt"><div class="name"><a target="_blank" rel="noreferrer" href="https://leetcode.com/problems/combination-sum-iii/">Combination Sum III</a></div><div class="desc">Pick k numbers 1..9.</div></div></label></div>
+          </div>
+        </details>
+      </section>
+    </main>
+  </div>
+
+  <div class="footer">
+    Built as a structured learning page from the referenced LeetCode Discuss post. Checkmarks are stored only in your browser.
+  </div>
+
+  <script>
+    (function(){
+      const $ = (s, r=document) => r.querySelector(s);
+      const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+      const LS_KEY = "faang_notes_checks_v1";
+
+      function loadState(){
+        try{
+          return JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+        }catch(e){ return {}; }
+      }
+      function saveState(state){
+        localStorage.setItem(LS_KEY, JSON.stringify(state));
+      }
+
+      const checkboxes = $$('input[type="checkbox"][data-key]');
+      const totalCountEl = $("#totalCount");
+      const doneCountEl = $("#doneCount");
+      const progTextEl = $("#progText");
+      const barFillEl = $("#barFill");
+
+      function applyState(){
+        const state = loadState();
+        for(const cb of checkboxes){
+          cb.checked = !!state[cb.dataset.key];
+        }
+        updateProgress();
+      }
+
+      function updateProgress(){
+        const total = checkboxes.length;
+        const done = checkboxes.filter(cb => cb.checked).length;
+        const pct = total ? Math.round((done/total)*100) : 0;
+        totalCountEl.textContent = String(total);
+        doneCountEl.textContent = String(done);
+        progTextEl.textContent = pct + "%";
+        barFillEl.style.width = pct + "%";
+      }
+
+      for(const cb of checkboxes){
+        cb.addEventListener("change", () => {
+          const state = loadState();
+          state[cb.dataset.key] = cb.checked;
+          saveState(state);
+          updateProgress();
+        });
+      }
+
+      // Search filtering
+      const search = $("#search");
+      const searchable = $$(".searchable");
+      function normalize(s){ return (s||"").toLowerCase().trim(); }
+
+      function runFilter(){
+        const q = normalize(search.value);
+        if(!q){
+          searchable.forEach(el => el.style.display = "");
+          return;
+        }
+        searchable.forEach(el => {
+          const text = normalize(el.innerText);
+          el.style.display = text.includes(q) ? "" : "none";
+        });
+      }
+      search.addEventListener("input", runFilter);
+
+      // Buttons
+      $("#btnExpand").addEventListener("click", () => $$("details").forEach(d => d.open = true));
+      $("#btnCollapse").addEventListener("click", () => $$("details").forEach(d => d.open = false));
+      $("#btnReset").addEventListener("click", () => {
+        if(!confirm("Reset all checkmarks stored in this browser?")) return;
+        localStorage.removeItem(LS_KEY);
+        applyState();
+      });
+      $("#btnJumpTop").addEventListener("click", () => window.scrollTo({top:0, behavior:"smooth"}));
+      $("#btnPrint").addEventListener("click", () => window.print());
+      $("#btnFocusSearch").addEventListener("click", () => { search.focus(); search.select(); });
+
+      // Keyboard shortcuts
+      document.addEventListener("keydown", (e) => {
+        if(e.key === "/" && !e.ctrlKey && !e.metaKey && !e.altKey){
+          e.preventDefault();
+          search.focus(); search.select();
+        }
+        if(e.key.toLowerCase() === "g" && !e.ctrlKey && !e.metaKey && !e.altKey){
+          window.scrollTo({top:0, behavior:"smooth"});
+        }
+      });
+
+      applyState();
+    })();
+  </script>
+</body>
+</html>
